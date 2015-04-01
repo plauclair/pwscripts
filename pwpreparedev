@@ -1,0 +1,23 @@
+#!/bin/bash
+INPUT=$1
+
+if [[ -z $INPUT ]]; then
+  INPUT="wwwroot"
+  echo "Directory option not set, installing into ./"$INPUT"/, please hold on..."
+else
+  echo "Installing in to ./"$INPUT"/, please hold on..."
+fi
+
+wget --quiet https://github.com/ryancramerdesign/ProcessWire/archive/dev.zip
+unzip -q dev.zip
+rm dev.zip
+mv ProcessWire-dev $INPUT
+chmod -R u+rwX,go+rX,go-w $INPUT
+mv $INPUT/htaccess.txt $INPUT/.htaccess
+# set the following line to your preferred /site preset
+mv $INPUT/site-languages $INPUT/site
+rm -rf $INPUT/site-*
+chmod 777 $INPUT/site/assets
+chmod 777 $INPUT/site/modules
+chmod 666 $INPUT/site/config.php
+echo "Directory \""$INPUT"\" all set for ProcessWire. Have fun!"
