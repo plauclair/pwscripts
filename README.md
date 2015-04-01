@@ -1,2 +1,2 @@
-# pwscripts
-Installation and post installation scripts for PW
+# ProcessWire Scripts
+Handy installation and post installation scripts for ProcessWire.
