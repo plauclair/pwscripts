@@ -15,7 +15,7 @@ mv ProcessWire-master $INPUT
 chmod -R u+rwX,go+rX,go-w $INPUT
 mv $INPUT/htaccess.txt $INPUT/.htaccess
 # set the following line to your preferred /site preset
-mv $INPUT/site-languages $INPUT/site
+mv $INPUT/site-blank $INPUT/site
 rm -rf $INPUT/site-*
 chmod 777 $INPUT/site/assets
 chmod 777 $INPUT/site/modules
