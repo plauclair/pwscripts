@@ -3,21 +3,58 @@ INPUT=$1
 
 if [[ -z $INPUT ]]; then
   INPUT="wwwroot"
-  echo "Directory option not set, installing into ./"$INPUT"/, please hold on..."
+  printf "Directory option not set, installing into ./$INPUT/...\n"
 else
-  echo "Installing in to ./"$INPUT"/, please hold on..."
+  printf "Installing in to ./$INPUT/...\n"
 fi
 
-wget --quiet grab.pw
-unzip -q index.html
-rm index.html
-mv ProcessWire-master $INPUT
+# Select a version
+printf "\nWhich ProcessWire branch do you want to install?\n"
+options=("master" "dev")
+select BRANCH in "${options[@]}"; do test -n "$BRANCH" && break; echo ">>> Invalid selection, please try again"; done
+
+printf "\nDownloading ProcessWire $BRANCH branch, please hold on...\n"
+
+# Get ProcessWire master and prepare files
+if [ "$BRANCH" == "master" ]; then
+  curl -o processwire.zip https://github.com/ryancramerdesign/ProcessWire/archive/master.zip -# -L
+fi
+
+if [ "$BRANCH" == "dev" ]; then
+  curl -o processwire.zip https://github.com/ryancramerdesign/ProcessWire/archive/dev.zip -# -L
+fi
+
+unzip -q processwire.zip
+rm processwire.zip
+
+if [ "$BRANCH" == "master" ]; then
+  mv ProcessWire-master $INPUT
+fi
+
+if [ "$BRANCH" == "dev" ]; then
+  mv ProcessWire-dev $INPUT
+fi
+
 chmod -R u+rwX,go+rX,go-w $INPUT
 mv $INPUT/htaccess.txt $INPUT/.htaccess
-# set the following line to your preferred /site preset
-mv $INPUT/site-blank $INPUT/site
-rm -rf $INPUT/site-*
-chmod 777 $INPUT/site/assets
-chmod 777 $INPUT/site/modules
-chmod 666 $INPUT/site/config.php
-echo "Directory \""$INPUT"\" all set for ProcessWire. Have fun!"
+
+cd $INPUT
+
+# Prompt for site profile
+printf "\nWhich site profile will you be using?\n"
+select d in site-*/; do test -n "$d" && break; echo ">>> Invalid selection, please try again"; done
+mv $d site/
+rm -rf site-*/
+
+# Set permissions
+chmod 777 site/assets
+chmod 777 site/modules
+chmod 666 site/config.php
+
+printf "\n"
+read -p "Press [Enter] once you've finished the installation process to remove the install files..."
+rm install.php
+rm -rf site/install
+printf "\nInstallation files removed.\n"
+
+printf "\nDirectory \"$INPUT\" all set for ProcessWire. Have fun! \n"
