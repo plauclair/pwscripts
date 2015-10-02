@@ -11,7 +11,7 @@ Tested on OSX and reported to be compatible with Debian (Wheezy).
 Run ``pwprepare`` in terminal. By default, the script will install ProcessWire in *./wwwroot/*. 
 
 Alternatively, it is also possible to run the script with an optional target directory, 
-e.g. ``pwprepare public_html``, where *public_html* is the name of the tagtet directory.
+e.g. ``pwprepare public_html``, where *public_html* is the name of the target directory.
 
 When the script prompts for a branch to use, select either *master* or *dev*.
 
