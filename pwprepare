@@ -11,7 +11,7 @@ fi
 
 # Select a version
 printf "\nWhich ProcessWire branch do you want to install?\n"
-options=("master" "dev")
+options=("master" "dev" "devns")
 select BRANCH in "${options[@]}"; do test -n "$BRANCH" && break; echo ">>> Invalid selection, please try again"; done
 
 printf "\nDownloading ProcessWire $BRANCH branch, please hold on...\n"
@@ -25,6 +25,10 @@ if [ "$BRANCH" == "dev" ]; then
   curl -o processwire.zip https://github.com/ryancramerdesign/ProcessWire/archive/dev.zip -# -L
 fi
 
+if [ "$BRANCH" == "devns" ]; then
+  curl -o processwire.zip https://github.com/ryancramerdesign/ProcessWire/archive/devns.zip -# -L
+fi
+
 unzip -q processwire.zip
 rm processwire.zip
 
@@ -34,6 +38,10 @@ fi
 
 if [ "$BRANCH" == "dev" ]; then
   mv ProcessWire-dev $INPUT
+fi
+
+if [ "$BRANCH" == "devns" ]; then
+  mv ProcessWire-devns $INPUT
 fi
 
 chmod -R u+rwX,go+rX,go-w $INPUT
